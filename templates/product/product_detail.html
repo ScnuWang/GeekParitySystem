@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load timestamp_parse %}
+{% block title %}
+    极客比价 | 产品详情
+{% endblock %}
+{% block javascriptextends %}
+    <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/series-label.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/modules/oldie.js"></script>
+    <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+    <script src="https://img.hcharts.cn/highcharts/themes/grid-light.js"></script>
+{% endblock %}
+{% block content %}
+{#    基本信息 #}
+    <div class="container">
+        <div class="row ">
+            <div class="col-xs-4 col-md-4">
+                <img src="{{ product.project_picUrl }}" alt="Geek 比价" class="img-responsive">
+            </div>
+            <div class="col-xs-4 col-md-4">
+                <p style="font-size: 22px">{{ product.project_name }}</p>
+                <p>{{ product.project_desc}}</p>
+                <hr>
+                <p>好评率：{{ product.project_score}}</p>
+                <strong style="color: #c00000;margin-right: 1em">{{ product.project_platform }} |  {{ product.project_price }}</strong>
+                <a href="{{ product.project_url }}"><button type="button" class="btn btn-danger">前往购买</button></a><br><br>
+                <p>同类产品：</p>
+                <div>
+                    <p>好评率：{{ product.project_score}}</p>
+                    <strong style="color: #c00000;margin-right: 1em">小米有品 |  {{ product.project_price }}</strong>
+                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+
+                    <p>好评率：{{ product.project_score}}</p>
+                    <strong style="color: #c00000;margin-right: 1em">苏宁易购 |  {{ product.project_price }}</strong>
+                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+
+                    <p>好评率：{{ product.project_score}}</p>
+                    <strong style="color: #c00000;margin-right: 1em">天猫商城 |  {{ product.project_price }}</strong>
+                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+
+                    <p>好评率：{{ product.project_score}}</p>
+                    <strong style="color: #c00000;margin-right: 1em">京东商城 |  {{ product.project_price }}</strong>
+                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div>
+                    <p>评论者：{{ comment.comment_user }}</p>
+                    <p>评论内容：{{ comment.comment_content }}</p>
+                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
+                </div>
+                <div>
+                    <p>评论者：{{ comment.comment_user }}</p>
+                    <p>评论内容：{{ comment.comment_content }}</p>
+                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
+                </div>
+                <div>
+                    <p>评论者：{{ comment.comment_user }}</p>
+                    <p>评论内容：{{ comment.comment_content }}</p>
+                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{#    历史价格曲线 #}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div id="container" ></div>
+                <script>
+                    var chart = Highcharts.chart('container', {
+                        title: {
+                            text: '该商品历史价格'
+                        },
+                        subtitle: {
+                            text: '数据来源：极客视界'
+                        },
+                        yAxis: {
+                            title: {
+                                text: '商品价格'
+                            }
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'right',
+                            verticalAlign: 'middle'
+                        },
+                        plotOptions: {
+                            series: {
+                                label: {
+                                    connectorAllowed: false
+                                },
+                                pointStart: 2010
+                            }
+                        },
+                        series: [{
+                            name: '网易严选',
+                            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                        }, {
+                            name: '小米有品',
+                            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+                        }, {
+                            name: '苏宁易购',
+                            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+                        }, {
+                            name: '天猫商城',
+                            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+                        }, {
+                            name: '京东商城',
+                            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+                        }],
+                        responsive: {
+                            rules: [{
+                                condition: {
+                                    maxWidth: 500
+                                },
+                                chartOptions: {
+                                    legend: {
+                                        layout: 'horizontal',
+                                        align: 'center',
+                                        verticalAlign: 'bottom'
+                                    }
+                                }
+                            }]
+                        }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
