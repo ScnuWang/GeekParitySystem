@@ -28,40 +28,34 @@
                 <p>同类产品：</p>
                 <div>
                     <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #c00000;margin-right: 1em">小米有品 |  {{ product.project_price }}</strong>
+                    <strong style="color: #5bc0de;margin-right: 1em">小米有品 |  {{ product.project_price }}</strong>
                     <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
 
                     <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #c00000;margin-right: 1em">苏宁易购 |  {{ product.project_price }}</strong>
+                    <strong style="color: #5bc0de;margin-right: 1em">苏宁易购 |  {{ product.project_price }}</strong>
                     <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
 
                     <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #c00000;margin-right: 1em">天猫商城 |  {{ product.project_price }}</strong>
+                    <strong style="color: #5bc0de;margin-right: 1em">天猫商城 |  {{ product.project_price }}</strong>
                     <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
 
                     <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #c00000;margin-right: 1em">京东商城 |  {{ product.project_price }}</strong>
+                    <strong style="color: #5bc0de;margin-right: 1em">京东商城 |  {{ product.project_price }}</strong>
                     <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div>
-                    <p>评论者：{{ comment.comment_user }}</p>
-                    <p>评论内容：{{ comment.comment_content }}</p>
-                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
-                </div>
-                <div>
-                    <p>评论者：{{ comment.comment_user }}</p>
-                    <p>评论内容：{{ comment.comment_content }}</p>
-                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
-                </div>
-                <div>
-                    <p>评论者：{{ comment.comment_user }}</p>
-                    <p>评论内容：{{ comment.comment_content }}</p>
-                    <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
-                </div>
+            <div class="col-md-4" id="comment_list">
+                {% for comment in comments %}
+                    <div>
+                        <p>评论者：{{ comment.comment_user }}</p>
+                        <p>评论内容：{{ comment.comment_content }}</p>
+                        <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
+                    </div>
+                    <hr>
+                {% empty %}
+                    <p>暂无评论</p>
+                {% endfor %}
             </div>
-
         </div>
     </div>
 {#    历史价格曲线 #}
@@ -130,5 +124,4 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
