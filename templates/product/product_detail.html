@@ -65,6 +65,9 @@
                 <div id="container" ></div>
                 <script>
                     var chart = Highcharts.chart('container', {
+                        credits:{
+                             enabled: false // 禁用版权信息
+                        },
                         title: {
                             text: '该商品历史价格'
                         },
@@ -91,7 +94,7 @@
                         },
                         series: [{
                             name: '网易严选',
-                            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+                            data: {{ product_prict_list}}
                         }, {
                             name: '小米有品',
                             data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
