@@ -49,7 +49,7 @@
                     <div>
                         <p>评论者：{{ comment.comment_user }}</p>
                         <p>评论内容：{{ comment.comment_content }}</p>
-                        <p>评论时间：{{ comment.comment_time|timestamp_parse:"Y-m-d H:i:s" }}</p>
+                        <p>评论时间：{{ comment.comment_time|timestamp_parse:"%Y-%m-%d %X" }}</p>
                     </div>
                     <hr>
                 {% empty %}
@@ -65,33 +65,25 @@
                 <div id="container" ></div>
                 <script>
                     var chart = Highcharts.chart('container', {
-                        credits:{
-                             enabled: false // 禁用版权信息
-                        },
                         title: {
                             text: '该商品历史价格'
                         },
                         subtitle: {
                             text: '数据来源：极客视界'
                         },
+                        xAxis:{
+                            categories:{{ product_date_list|safe }},
+                            {#tickmarkPlacement:'on',#}
+                            title: {
+                                text: ''                 // 标题
+                            },
+                        },
                         yAxis: {
                             title: {
                                 text: '商品价格'
                             }
                         },
-                        legend: {
-                            layout: 'vertical',
-                            align: 'right',
-                            verticalAlign: 'middle'
-                        },
-                        plotOptions: {
-                            series: {
-                                label: {
-                                    connectorAllowed: false
-                                },
-                                pointStart: 2010
-                            }
-                        },
+                        credits:{enabled:false},
                         series: [{
                             name: '网易严选',
                             data: {{ product_prict_list}}
@@ -107,21 +99,7 @@
                         }, {
                             name: '京东商城',
                             data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-                        }],
-                        responsive: {
-                            rules: [{
-                                condition: {
-                                    maxWidth: 500
-                                },
-                                chartOptions: {
-                                    legend: {
-                                        layout: 'horizontal',
-                                        align: 'center',
-                                        verticalAlign: 'bottom'
-                                    }
-                                }
-                            }]
-                        }
+                        }]
                     });
                 </script>
             </div>

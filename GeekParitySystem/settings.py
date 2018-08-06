@@ -87,11 +87,6 @@ DATABASES = {
     },
     'mongo_db':{
        'ENGINE': None,
-        # 'NAME' : 'projects',
-        # add session
-        # 'SESSION_ENGINE' : 'mongoengine.django.sessions',
-        # add authentication
-        # 'AUTHENTICATION_BACKENDS' : ('mongoengine.django.auth.MongoEngineBackend',)
     },
 }
 from mongoengine import connect
