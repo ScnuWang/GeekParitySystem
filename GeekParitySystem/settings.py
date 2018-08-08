@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'product.apps.ProductConfig',
     'geekuser.apps.GeekuserConfig',
+    'jieba'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ DATABASES = {
     },
 }
 from mongoengine import connect
-connect('wangyi',host='127.0.0.1',port = 27017)  # 连接的数据库名称
+connect('geekparity',host='127.0.0.1',port = 27017)  # 连接的数据库名称
 
 
 # Password validation
@@ -139,3 +140,5 @@ AUTH_USER_MODEL = 'geekuser.GeekUser'
 
 # 多数据库路由配置
 DATABASE_ROUTERS = ['GeekParitySystem.dbrouter.AuthRouter',]
+
+MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static\\keyword\\product.txt')

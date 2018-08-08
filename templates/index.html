@@ -3,55 +3,112 @@
     极客比价 | 首页
 {% endblock %}
 {% block content %}
-    <div class="container ">
-{#        巨幕#}
-        <div class="jumbotron">
-          <h2>极客视界，更方便，更划算的视界</h2>
-          <p>...</p>
-          <p><a class="btn btn-primary btn-lg" href="#" role="button">Geek geek</a></p>
-        </div>
-
+     <div class="container-fluid">
         <div class="row">
-          <div class="col-md-3">
-              <div class="panel panel-default" >
-                  <div class="panel-heading" style="background-color: #ffffff">
-                    <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+            <div class="col-md-2">
+                <ul id="main-nav" class="nav nav-tabs nav-stacked" style="">
+                    <li class="active">
+                        <a href="#">
+                            <i class="glyphicon glyphicon-th-large"></i>
+                            首页
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#systemSetting" class="nav-header collapsed" data-toggle="collapse">
+                            <i class="glyphicon glyphicon-cog"></i>
+                            系统管理
+                            <span class="pull-right glyphicon glyphicon-chevron-down"></span>
+                        </a>
+                        <ul id="systemSetting" class="nav nav-list collapse secondmenu" style="height: 0px;">
+                            <li><a href="mytask"><i class="glyphicon glyphicon-user"></i>用户管理</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-th-list"></i>菜单管理</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-asterisk"></i>角色管理</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-edit"></i>修改密码</a></li>
+                            <li><a href="#"><i class="glyphicon glyphicon-eye-open"></i>日志查看</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="./plans.html">
+                            <i class="glyphicon glyphicon-credit-card"></i>
+                            物料管理
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./grid.html">
+                            <i class="glyphicon glyphicon-globe"></i>
+                            分发配置
+                            <span class="label label-warning pull-right">5</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="./charts.html">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                            图表统计
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="glyphicon glyphicon-fire"></i>
+                            关于系统
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                {#        巨幕#}
+                <div class="jumbotron">
+                  <h2>极客视界，更方便，更划算的视界</h2>
+                  <p>...</p>
+                  <p><a class="btn btn-primary btn-lg" href="#" role="button">Geek geek</a></p>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-3">
+                      <div class="panel panel-default" >
+                          <div class="panel-heading" style="background-color: #ffffff">
+                            <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                      </div>
                   </div>
-                  <div class="panel-body">
-                    Panel content
+                  <div class="col-md-3">
+                      <div class="panel panel-default" >
+                          <div class="panel-heading" style="background-color: #ffffff">
+                            <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                      </div>
                   </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="panel panel-default" >
-                  <div class="panel-heading" style="background-color: #ffffff">
-                    <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                  <div class="col-md-3">
+                      <div class="panel panel-default" >
+                          <div class="panel-heading" style="background-color: #ffffff">
+                            <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                      </div>
                   </div>
-                  <div class="panel-body">
-                    Panel content
+                  <div class="col-md-3">
+                      <div class="panel panel-default" >
+                          <div class="panel-heading" style="background-color: #ffffff">
+                            <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                          </div>
+                          <div class="panel-body">
+                            Panel content
+                          </div>
+                      </div>
                   </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="panel panel-default" >
-                  <div class="panel-heading" style="background-color: #ffffff">
-                    <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
-                  </div>
-                  <div class="panel-body">
-                    Panel content
-                  </div>
-              </div>
-          </div>
-          <div class="col-md-3">
-              <div class="panel panel-default" >
-                  <div class="panel-heading" style="background-color: #ffffff">
-                    <img src="http://img.youpin.mi-img.com/800_pic/a61016fbc9aae9a18ef0bde46c56f80d.png@base@tag=imgScale&h=350&w=350&et=1&eth=480&etw=480&etc=FFFFFF?t=webp" alt="音响" style="width: 195px;height: 195px;" class="img-rounded center-block">
-                  </div>
-                  <div class="panel-body">
-                    Panel content
-                  </div>
-              </div>
-          </div>
+                </div>
+            </div>
         </div>
     </div>
+{% endblock %}
+
+{% block footer %}
+
 {% endblock %}

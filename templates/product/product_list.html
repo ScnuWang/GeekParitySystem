@@ -7,15 +7,15 @@
         <div class="row">
             {% for product in product_list %}
                 <div class="col-md-3">
-                    <a href="{% url 'product:product_detail' product.original_id  %}">
+                    <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
                       <div class="panel panel-default" >
                           <div class="panel-heading" style="background-color: #ffffff">
                             <img src="{{ product.project_picUrl }}" alt="Geek 比价" style="width: 195px;height: 195px;" class="img-rounded center-block">
                           </div>
                           <div class="panel-body text-center">
-                            <p>{{ product.project_name }}</p>
+                            <p>{{ product.project_name|truncatechars:15 }}</p>
                             <p>{{ product.project_desc|truncatechars:10 }}</p>
-                            <p style="color: #c00000">{{ product.project_price }}</p>
+                            <p style="color: #c00000">{{ product.project_platform }}|{{ product.project_price }}</p>
                           </div>
                       </div>
                     </a>

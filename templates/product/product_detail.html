@@ -15,7 +15,7 @@
 {#    基本信息 #}
     <div class="container">
         <div class="row ">
-            <div class="col-xs-4 col-md-4">
+            <div class="col-xs-4 col-md-4 col-lg-4">
                 <img src="{{ product.project_picUrl }}" alt="Geek 比价" class="img-responsive">
             </div>
             <div class="col-xs-4 col-md-4">
@@ -25,25 +25,40 @@
                 <p>好评率：{{ product.project_score}}</p>
                 <strong style="color: #c00000;margin-right: 1em">{{ product.project_platform }} |  {{ product.project_price }}</strong>
                 <a href="{{ product.project_url }}"><button type="button" class="btn btn-danger">前往购买</button></a><br><br>
+                <hr>
+{#                后续优化：根据关键字异步加载#}
                 <p>同类产品：</p>
-                <div>
-                    <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #5bc0de;margin-right: 1em">小米有品 |  {{ product.project_price }}</strong>
-                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+{# 如果没有数据需要处理#}
+                {% if product.website_id == 2 %}
+                    <strong style="color: #5bc0de;margin-right: 1em">小米有品 |  {{ xiaomi_product.project_name }}</strong>
+                    <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ xiaomi_product.project_price}} |  好评率：{{ xiaomi_product.project_score}}%</p>
+                    <a href="{{ xiaomi_product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+                {% elif product.website_id == 1 %}
+                    <strong style="color: #5bc0de;margin-right: 1em">网易严选 |  {{ wangyi_product.project_name }}</strong>
+                    <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ wangyi_product.project_price}} |  好评率：{{ wangyi_product.project_score}}%</p>
+                    <a href="{{ wangyi_product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+                {% else %}
+                    {% if product.website_id == 1 %}
+                        <strong style="color: #5bc0de;margin-right: 1em">网易严选 |  暂无同类产品</strong><br><br>
+                    {% elif product.website_id == 2%}
+                        <strong style="color: #5bc0de;margin-right: 1em">小米有品 |  暂无同类产品</strong><br><br>
+                    {% endif %}
+                {% endif %}
 
-                    <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #5bc0de;margin-right: 1em">苏宁易购 |  {{ product.project_price }}</strong>
-                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+                <strong style="color: #5bc0de;margin-right: 1em">苏宁易购 |  {{ product.project_name }}</strong>
+                <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ product.project_price}} |  好评率：{{ product.project_score}}</p>
+                <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
 
-                    <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #5bc0de;margin-right: 1em">天猫商城 |  {{ product.project_price }}</strong>
-                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+                <strong style="color: #5bc0de;margin-right: 1em">天猫商城 |  {{ product.project_name }}</strong>
+                <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ product.project_price}} |  好评率：{{ product.project_score}}</p>
+                <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
 
-                    <p>好评率：{{ product.project_score}}</p>
-                    <strong style="color: #5bc0de;margin-right: 1em">京东商城 |  {{ product.project_price }}</strong>
-                    <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
-                </div>
+                <strong style="color: #5bc0de;margin-right: 1em">京东商城 |  {{ product.project_name }}</strong>
+                <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ product.project_price}} |  好评率：{{ product.project_score}}</p>
+                <a href="{{ product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
+
             </div>
+{#        后续优化：异步加载评论#}
             <div class="col-md-4" id="comment_list">
                 {% for comment in comments %}
                     <div>
@@ -66,10 +81,10 @@
                 <script>
                     var chart = Highcharts.chart('container', {
                         title: {
-                            text: '该商品历史价格'
+                            text: '该商品历史价格变化曲线'
                         },
                         subtitle: {
-                            text: '数据来源：极客视界'
+                            text: '数据来源：极客视界（www.geekview.cn）'
                         },
                         xAxis:{
                             categories:{{ product_date_list|safe }},
@@ -86,19 +101,27 @@
                         credits:{enabled:false},
                         series: [{
                             name: '网易严选',
-                            data: {{ product_prict_list}}
+                            data: {% if wangyi_product_price_list %}
+                                {{ wangyi_product_price_list }}
+                                {% else %}
+                                []
+                            {% endif %}
                         }, {
                             name: '小米有品',
-                            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+                            data: {% if xiaomi_product_price_list %}
+                                {{ xiaomi_product_price_list }}
+                                {% else %}
+                                []
+                            {% endif %}
                         }, {
                             name: '苏宁易购',
-                            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+                            data: [0, 0, 0, 0, 0, 0, 0, 0]
                         }, {
                             name: '天猫商城',
-                            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+                            data: [null, null, 1, 1, 1, 1, 1, 1]
                         }, {
                             name: '京东商城',
-                            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+                            data: [2, 2, 3, 3, 3, 5, 2, 1]
                         }]
                     });
                 </script>
