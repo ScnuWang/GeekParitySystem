@@ -18,9 +18,12 @@ def get_product(website_id,original_id,keyword):
         product = ProductModel.objects.filter(original_id=original_id, website_id=website_id).order_by('-last_updated').first()
     elif keyword:
         product = ProductModel.objects.filter(project_name__contains=keyword, website_id=website_id).order_by('-last_updated').first()
-        original_id = product.original_id
+        if product:
+            original_id = product.original_id
+        else:
+            return None,None,None
     else:
-        return
+        return None,None,None
     # 获取产品的历史价格列表
     product_price_list = ProductModel.objects.filter(original_id=original_id, website_id=website_id).order_by('last_updated').values_list('project_price')
     product_price_list = [float(price) for price in product_price_list]
@@ -42,7 +45,7 @@ def get_product_by_id(request,website_id,original_id):
                 wangyi_product,wangyi_product_price_list,wangyi_product_date_list = get_product(keyword=word,website_id=2,original_id=None)
                 break
     # 获取对应的最新评论的前3条
-    comments = CommentModel.objects.filter(project_id=str(original_id),website_id=website_id).order_by('-last_updated').limit(3)
+    comments = CommentModel.objects.filter(project_id=original_id,website_id=website_id).order_by('-last_updated').limit(3)
     # print('=====================>',product)
     context = {}
     context['product'] = product

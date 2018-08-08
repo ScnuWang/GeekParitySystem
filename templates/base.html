@@ -21,11 +21,11 @@
                 <p class="pull-right" style="margin-right: 2em"><span class="glyphicon glyphicon-user" style="margin-right: 1em;margin-top: 1em" aria-hidden="true"></span>{{ user.username }}</p>
             {% else %}
                 <a href="{% url 'login' %}">
-                <button type="submit" class="btn btn-default btn-lg pull-right" >登录</button>
-            </a>
-            <a href="{% url 'regist' %}">
-                <button type="submit" class="btn btn-primary btn-lg pull-right" >注册</button>
-            </a>
+                    <button type="submit" class="btn btn-default btn-lg pull-right" >登录</button>
+                </a>
+                <a href="{% url 'regist' %}">
+                    <button type="submit" class="btn btn-primary btn-lg pull-right" >注册</button>
+                </a>
             {% endif %}
         </div>
     </div>

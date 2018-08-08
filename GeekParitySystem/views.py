@@ -1,11 +1,17 @@
 from django.shortcuts import render,redirect,reverse
 from .forms import LoginForm,RegistForm
 from django.contrib import auth
-from django.contrib.auth.models import User
 from geekuser.models import GeekUser,GeekCode
+from product.models import ProductModel
 
 def home(request):
-    return render(request,'index.html')
+    product_list_1 = ProductModel.objects.filter(website_id=1).order_by('-last_updated').limit(8)
+    product_list_2 = ProductModel.objects.filter(website_id=2).order_by('-last_updated').limit(8)
+
+    context = {}
+    context['product_list_1'] = product_list_1
+    context['product_list_2'] = product_list_2
+    return render(request,'index.html',context)
 
 # 处理登录相关
 def login(request):
