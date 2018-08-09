@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from .views import home,login,regist
+from .views import home,login,regist,logout
 
 urlpatterns = [
     path('', home, name='home'),
@@ -23,5 +23,6 @@ urlpatterns = [
     path('product/', include(('product.urls','product'),namespace='product')),
     path('login', login, name='login'),
     path('regist', regist, name='regist'),
+    path('logout', logout, name='logout'),
     # path('accounts/', include('django.contrib.auth.urls')),
 ]

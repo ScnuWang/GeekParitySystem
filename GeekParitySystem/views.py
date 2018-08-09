@@ -23,7 +23,7 @@ def login(request):
             # 登录验证
             auth.login(request,login_form.cleaned_data['user'])
             # 登录成功跳转
-            return redirect(reverse('product:product_list',args=[]))
+            return redirect(reverse('home',args=[]))
     # 其他请求或者验证出现异常，则认为是跳转到登录页面
     else:
         login_form = LoginForm()
@@ -58,5 +58,6 @@ def regist(request):
 
 
 # 处理注销相关
-def loginout():
-    pass
+def logout(request):
+    auth.logout(request)
+    return redirect(reverse('home',args=[]))
