@@ -31,6 +31,7 @@ def login(request):
     context['login_form'] = login_form
     return render(request,'registration/login.html',context)
 
+# 处理注册相关
 def regist(request):
     if request.POST:
         regist_form = RegistForm(request.POST)
@@ -56,3 +57,6 @@ def regist(request):
     return render(request,'registration/regist.html',context)
 
 
+# 处理注销相关
+def loginout():
+    pass
