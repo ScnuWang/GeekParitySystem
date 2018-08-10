@@ -6,7 +6,7 @@ from product.models import ProductModel
 from .settings import QRCODE_IMAGE_PATH
 import qrcode,uuid
 
-
+# 首页
 def home(request):
     product_list_1 = ProductModel.objects.filter(website_id=1).order_by('-last_updated').limit(8)
     product_list_2 = ProductModel.objects.filter(website_id=2).order_by('-last_updated').limit(8)
@@ -67,7 +67,10 @@ def logout(request):
     auth.logout(request)
     return redirect(reverse('home',args=[]))
 
-# 邀请码获取
+# 邀请码获取 并生成图片，让用户扫描二维码获取图片，这样设计师用户体验很差，不够方便
+# 可以在用户分享的时候，通过用户信息，生成相应二维码，完成图片分享
+# 但是如果直接通过注册页面点击一个按钮就获取邀请码，就没人会愿意用别人的邀请码了
+# 可以导流到微信公众号
 def get_invation_qrcode(request):
     qr = qrcode.QRCode(
         version=1,
