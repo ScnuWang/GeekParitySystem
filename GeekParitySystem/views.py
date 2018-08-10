@@ -3,6 +3,9 @@ from .forms import LoginForm,RegistForm
 from django.contrib import auth
 from geekuser.models import GeekUser,GeekCode
 from product.models import ProductModel
+from .settings import QRCODE_IMAGE_PATH
+import qrcode,uuid
+
 
 def home(request):
     product_list_1 = ProductModel.objects.filter(website_id=1).order_by('-last_updated').limit(8)
@@ -54,6 +57,8 @@ def regist(request):
         regist_form = RegistForm()
     context = {}
     context['regist_form'] = regist_form
+    # 由于邀请码的链接是变量，所以需要将邀请码的链接名称当做参数传入，否则在渲染的时候，不知道变量的值是什么
+    context['get_invation_qrcode'] = 'get_invation_qrcode'
     return render(request,'registration/regist.html',context)
 
 
@@ -61,3 +66,32 @@ def regist(request):
 def logout(request):
     auth.logout(request)
     return redirect(reverse('home',args=[]))
+
+# 邀请码获取
+def get_invation_qrcode(request):
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=1,
+    )
+    code = GeekCode.objects.filter(is_available=True).first()
+    if code:
+        qr.add_data("您的专属邀请码为："+code.invation_code)
+    else:
+        generate_invation_code()
+        code = GeekCode.objects.filter(is_available=True).first()
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(QRCODE_IMAGE_PATH + str(code.invation_code)+'.png')
+    context = {}
+    context['invation_code'] =  'qrcode/'+ code.invation_code + '.png'
+    return render(request,'qrcode.html',context)
+
+# 生成邀请码
+def generate_invation_code():
+    for i in range(1, 10001):
+        geek_code = GeekCode()
+        geek_code.is_available = True
+        geek_code.invation_code = str(uuid.uuid1()).split('-')[0]
+        geek_code.save()

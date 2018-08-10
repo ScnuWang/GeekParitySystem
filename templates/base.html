@@ -16,7 +16,7 @@
 <body>
 {#  导航栏#}
 {% block navbar %}
-    <div class="container-fluid ">
+    <div class="container-fluid " style="margin-top: 1em">
         <div >
 {#        Django 默认未登录用户为AnonymousUser#}
             {% if not user.username %}
@@ -24,7 +24,7 @@
                     <button type="submit" class="btn btn-default btn-lg pull-right" >登录</button>
                 </a>
                 <a href="{% url 'regist' %}">
-                    <button type="submit" class="btn btn-primary btn-lg pull-right" >注册</button>
+                    <button type="submit" class="btn btn-primary btn-lg pull-right" style="margin-right: 1em">注册</button>
                 </a>
             {% else %}
                 <a href="{% url 'logout' %}">
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <div class="container" style="width: 90%">
+    <div class="container" style="width: 90% ;margin-top: 1em">
         <nav class="navbar navbar-default " style="background-color: #ffffff;">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->

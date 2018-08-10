@@ -27,6 +27,7 @@
                             <p class="text-danger">{{ field.errors.as_text }}</p>
                         {% endfor %}
                           <span class="pull-left text-danger" >{{ regist_form.non_field_errors }}</span>
+                          没有邀请码？<a href="{% url get_invation_qrcode %}">获取邀请码</a>
                           <button type="submit" class="btn btn-primary pull-right">注册</button>
                      </form>
                   </div>

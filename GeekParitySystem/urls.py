@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from .views import home,login,regist,logout
+from .views import home,login,regist,logout,get_invation_qrcode
 
 urlpatterns = [
     path('', home, name='home'),
@@ -24,5 +24,6 @@ urlpatterns = [
     path('login', login, name='login'),
     path('regist', regist, name='regist'),
     path('logout', logout, name='logout'),
+    path('get_invation_qrcode', get_invation_qrcode, name='get_invation_qrcode'),
     # path('accounts/', include('django.contrib.auth.urls')),
 ]

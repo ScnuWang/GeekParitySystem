@@ -142,3 +142,5 @@ AUTH_USER_MODEL = 'geekuser.GeekUser'
 DATABASE_ROUTERS = ['GeekParitySystem.dbrouter.AuthRouter',]
 
 MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static\\keyword\\product.txt')
+
+QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static\\qrcode\\')
