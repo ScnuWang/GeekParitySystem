@@ -3,7 +3,7 @@
 {% block title %}
     极客比价 | 产品详情
 {% endblock %}
-{% block javascriptextends %}
+{% block headextends %}
     <script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
     <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
     <script src="https://img.hcharts.cn/highcharts/modules/series-label.js"></script>
@@ -20,6 +20,7 @@
             </div>
             <div class="col-xs-4 col-md-4">
                 <p style="font-size: 22px">{{ product.project_name }}</p>
+                <p style="font-size: 22px"><span class="label label-info">标签</span></p>
                 <p>{{ product.project_desc}}</p>
                 <hr>
                 <p>好评率：{{ product.project_score}}</p>
@@ -34,7 +35,7 @@
                     <a href="{{ xiaomi_product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
                 {% elif product.website_id == 1 and wangyi_product %}
                     <strong style="color: #5bc0de;margin-right: 1em">网易严选 |  {{ wangyi_product.project_name }}</strong>
-                    <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ wangyi_product.project_price}} |  好评率：{{ wangyi_product.project_score}}%</p>
+                    <p style="color: #c00000;margin-right: 1em;margin-top: 1em">{{ wangyi_product.project_price}} |  好评率：{{ wangyi_product.project_score}}</p>
                     <a href="{{ wangyi_product.project_url }}"><button type="button" class="btn btn-info">前往购买</button></a><br><br>
                 {% else %}
                     {% if product.website_id == 1 %}

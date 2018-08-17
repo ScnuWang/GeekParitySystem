@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,reverse,redirect
 from django.http import JsonResponse
-from .models import ProductModel,CommentModel
+from .models import ProductModel,CommentModel,UniqueProduct
 from datetime import datetime
 import jieba
 from GeekParitySystem.settings import MY_SEG_DICT_PATH
@@ -27,9 +27,9 @@ def get_product(website_id,original_id,keyword):
     # 获取产品的历史价格列表
     product_price_list = ProductModel.objects.filter(original_id=original_id, website_id=website_id).order_by('last_updated').values_list('project_price')
     product_price_list = [float(price) for price in product_price_list]
-    # 历史价格对应的时间并去重
+    # 历史价格对应的时间
     product_date_list = ProductModel.objects.filter(original_id=original_id, website_id=website_id).order_by('last_updated').values_list('last_updated')
-    product_date_list = [datetime.strptime(date, '%Y-%m-%d %X').strftime('%Y-%m-%d') for date in product_date_list]
+    product_date_list = [date.strftime('%Y-%m-%d') for date in product_date_list]
     return product,product_price_list,product_date_list
 
 def get_product_by_id(request,website_id,original_id):
@@ -60,18 +60,40 @@ def get_product_by_id(request,website_id,original_id):
 
 
 def get_product_list(request):
-
     # 关键字查询
-    if request.POST.get('keyword') or request.POST.get('website_id'):
+    if request.POST.get('keyword'):
         keyword = request.POST.get('keyword')
-        website_id = request.POST.get('website_id')
-        product_list = ProductModel.objects(project_name__contains=keyword,website_id=website_id)
+        product_list = []
+        for product in UniqueProduct.objects.all():
+            if keyword in product.tags:
+                product_list.append(product)
     else:
         product_list = ProductModel.objects.limit(10)
-
     context = {}
     context['product_list'] = product_list
     return render(request,'product/product_list.html',context)
 
 def keyword_serach(request):
     pass
+
+# 分词分类
+def classify(request):
+    nontags_products = ProductModel.objects.filter(tags_status=0,last_updated__gt=datetime.now().date())
+    for product in nontags_products:
+        if not UniqueProduct.objects.filter(original_id=product.original_id,website_id=product.website_id):
+            # 对没有分类的没每一个产品进行分类
+            unique_product = UniqueProduct()
+            unique_product.project_name = product['project_name']
+            unique_product.original_id = product['original_id']
+            unique_product.website_id = product['website_id']
+            unique_product.project_price = product['project_price']
+            unique_product.project_url = product['project_url']
+            unique_product.project_picUrl = product['project_picUrl']
+            unique_product.project_score = product['project_score']
+            unique_product.project_platform = product['project_platform']
+            tags = jieba.cut_for_search(product.project_name)# jieba引擎模式
+            unique_product.tags = list(tags)
+            unique_product.tags_status = 1
+            unique_product.last_updated = datetime.now()
+            unique_product.save()
+    return redirect(reverse('home',args=[]))

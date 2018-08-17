@@ -3,5 +3,6 @@ from . import views
 urlpatterns = [
     path('', views.get_product_list, name='product_list'),
     path('<str:website_id>/<str:original_id>', views.get_product_by_id, name='product_detail'),
+    path('classify', views.classify, name='classify'),
     path('<str:original_id>', views.get_product_comment_id, name='product_comment'),
 ]

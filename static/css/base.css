@@ -1,4 +1,4 @@
-/*去掉导航栏个人信息边框*/
-.form-control{
+/*去掉导航栏个人信息模态框内容的边框*/
+#user_modal .form-control{
     border: 0px!important;
 }
