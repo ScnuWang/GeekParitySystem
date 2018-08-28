@@ -39,6 +39,10 @@ class UniqueProduct(Document):
     original_id = StringField()
     # 产品归属平台  (网易：1；小米：2)
     website_id = IntField()
+    # 分类编号,一个产品可能属于多个分类
+    category_id = ListField()
+    # 关键字状态 0：未分类或分类异常 1：已分类
+    category_status = IntField(default=0)
     # 产品名称
     project_name = StringField()
     # 产品价格

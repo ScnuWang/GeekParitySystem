@@ -1,13 +1,16 @@
 from django.shortcuts import render,reverse,redirect
 from django.http import JsonResponse
-from .models import ProductModel,CommentModel,UniqueProduct
+from django.core import serializers
+from .models import ProductModel,CommentModel,UniqueProduct,Category
 from datetime import datetime
-import jieba
-from GeekParitySystem.settings import MY_SEG_DICT_PATH
+import jieba,json
+import jieba.analyse
+from GeekParitySystem.settings import MY_SEG_DICT_PATH,MY_CATEGORY_PATH
 jieba.load_userdict(MY_SEG_DICT_PATH)
 
 def get_product_comment_id(request,original_id):
-    comment = CommentModel.objects.filter(project_id=int(original_id)).order_by('-last_updated').limit(3)
+    # 解决提示错误：Object of type 'QuerySet' is not JSON serializable
+    comment = serializers.serialize('json',CommentModel.objects.filter(project_id=int(original_id)).order_by('-last_updated').limit(3))
     context = {}
     context['comments'] = comment
     return JsonResponse(context)
@@ -73,12 +76,22 @@ def get_product_list(request):
     context['product_list'] = product_list
     return render(request,'product/product_list.html',context)
 
-def keyword_serach(request):
-    pass
-
 # 分词分类
 def classify(request):
     nontags_products = ProductModel.objects.filter(tags_status=0,last_updated__gt=datetime.now().date())
+    # 初始化分类数据
+    if not Category.objects.all():
+        with open(MY_CATEGORY_PATH, encoding='UTF-8') as file:
+            json_categorylist = json.loads(file.read())
+            for json_category in json_categorylist:
+                category = Category()
+                category.category_id = json_category['category_id']
+                category.category_name = json_category['category_name']
+                category.tags = json_category['tags']
+                category.save()
+
+    #   避免多次查询数据库
+    category_tags_dic = {category_id:tags for category_id,tags in Category.objects.all().values_list('category_id','tags')}
     for product in nontags_products:
         if not UniqueProduct.objects.filter(original_id=product.original_id,website_id=product.website_id):
             # 对没有分类的没每一个产品进行分类
@@ -91,9 +104,33 @@ def classify(request):
             unique_product.project_picUrl = product['project_picUrl']
             unique_product.project_score = product['project_score']
             unique_product.project_platform = product['project_platform']
-            tags = jieba.cut_for_search(product.project_name)# jieba引擎模式
-            unique_product.tags = list(tags)
+            # tags = jieba.lcut_for_search(product.project_name)# jieba引擎模式，直接返回list
+            tags = jieba.analyse.extract_tags(product.project_name, topK=20, withWeight=False, allowPOS=())
+            unique_product.tags = tags
             unique_product.tags_status = 1
+            category_list = []
+            # 处理产品分类信息
+            for category_id,category_tags in category_tags_dic.items():
+                # 通过两个list有交集来判断产品关键字里面是否包含在分类关键字里面
+                if list(set(tags).intersection(set(category_tags))):
+                    category_list.append(category_id) # 一个产品可能有多个分类
+                    unique_product.category_status = 1
+
+            unique_product.category_id = category_list
             unique_product.last_updated = datetime.now()
             unique_product.save()
     return redirect(reverse('home',args=[]))
+
+# 菜单获取产品列表
+def get_products_by_category(request,category_id):
+    product_list_1 = []
+    product_list_2 = []
+    for product in UniqueProduct.objects.all():
+        if category_id in  product.category_id and product.website_id == 1:
+            product_list_1.append(product)
+        if category_id in  product.category_id and product.website_id == 2:
+            product_list_2.append(product)
+    products = {'xiaomi': product_list_1, 'wangyi': product_list_2}
+    context = {}
+    context['products'] = products
+    return render(request, 'index.html', context)

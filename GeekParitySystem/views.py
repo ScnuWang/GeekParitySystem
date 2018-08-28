@@ -10,10 +10,9 @@ import qrcode,uuid
 def home(request):
     product_list_1 = ProductModel.objects.filter(website_id=1).order_by('-last_updated').limit(8)
     product_list_2 = ProductModel.objects.filter(website_id=2).order_by('-last_updated').limit(8)
-
+    products = {'xiaomi':product_list_1,'wangyi':product_list_2}
     context = {}
-    context['product_list_1'] = product_list_1
-    context['product_list_2'] = product_list_2
+    context['products'] = products
     return render(request,'index.html',context)
 
 # 处理登录相关

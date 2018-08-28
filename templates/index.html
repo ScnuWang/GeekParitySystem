@@ -26,15 +26,15 @@
                                     <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                                 </a>
                                 <ul id="order_01_01" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">夏凉</a></li>
-                                    <li><a href="#">床垫</a></li>
-                                    <li><a href="#">灯具</a></li>
-                                    <li><a href="#">家具</a></li>
-                                    <li><a href="#">被子</a></li>
-                                    <li><a href="#">枕头</a></li>
-                                    <li><a href="#">床品件套</a></li>
-                                    <li><a href="#">家饰花卉</a></li>
-                                    <li><a href="#">布艺软装</a></li>
+                                    <li><a href="{% url 'product:category' 101 %}">夏凉</a></li>
+                                    <li><a href="{% url 'product:category' 102 %}">床垫</a></li>
+                                    <li><a href="{% url 'product:category' 103 %}">灯具</a></li>
+                                    <li><a href="{% url 'product:category' 104 %}">家具</a></li>
+                                    <li><a href="{% url 'product:category' 105 %}">被子</a></li>
+                                    <li><a href="{% url 'product:category' 106 %}">枕头</a></li>
+                                    <li><a href="{% url 'product:category' 107 %}">床品件套</a></li>
+                                    <li><a href="{% url 'product:category' 108 %}">家饰花卉</a></li>
+                                    <li><a href="{% url 'product:category' 109 %}">布艺软装</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -292,45 +292,53 @@
                   <p>...</p>
                   <p><a class="btn btn-primary btn-lg" href="#" role="button">Geek geek</a></p>
                 </div>
-
                 <h3>小米有品</h3>
-                <div class="row">
-                    {% for product in product_list_1 %}
-                        <div class="col-md-3">
-                            <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
-                              <div class="panel panel-default" >
-                                  <div class="panel-heading" style="background-color: #ffffff">
-                                    <img src="{{ product.project_picUrl }}" alt="Geek 比价" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                {% if products.xiaomi %}
+                    <div class="row">
+                        {% for product in products.xiaomi %}
+                            <div class="col-md-3">
+                                <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
+                                  <div class="panel panel-default" >
+                                      <div class="panel-heading" style="background-color: #ffffff">
+                                        <img src="{{ product.project_picUrl }}" alt="Geek 比价" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                                      </div>
+                                      <div class="panel-body text-center">
+                                        <p>{{ product.project_name|truncatechars:15 }}</p>
+                                        <p>{{ product.project_desc|truncatechars:10 }}</p>
+                                        <p style="color: #c00000">{{ product.project_platform }}|{{ product.project_price }}</p>
+                                      </div>
                                   </div>
-                                  <div class="panel-body text-center">
-                                    <p>{{ product.project_name|truncatechars:15 }}</p>
-                                    <p>{{ product.project_desc|truncatechars:10 }}</p>
-                                    <p style="color: #c00000">{{ product.project_platform }}|{{ product.project_price }}</p>
-                                  </div>
-                              </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    暂无数据
+                {% endif %}
+
                 <h3>网易严选</h3>
-                <div class="row">
-                    {% for product in product_list_2 %}
-                        <div class="col-md-3">
-                            <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
-                              <div class="panel panel-default" >
-                                  <div class="panel-heading" style="background-color: #ffffff">
-                                    <img src="{{ product.project_picUrl }}" alt="Geek 比价" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                {% if products.wangyi %}
+                    <div class="row">
+                        {% for product in products.wangyi %}
+                            <div class="col-md-3">
+                                <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
+                                  <div class="panel panel-default" >
+                                      <div class="panel-heading" style="background-color: #ffffff">
+                                        <img src="{{ product.project_picUrl }}" alt="Geek 比价" style="width: 195px;height: 195px;" class="img-rounded center-block">
+                                      </div>
+                                      <div class="panel-body text-center">
+                                        <p>{{ product.project_name|truncatechars:15 }}</p>
+                                        <p>{{ product.project_desc|truncatechars:10 }}</p>
+                                        <p style="color: #c00000">{{ product.project_platform }}|{{ product.project_price }}</p>
+                                      </div>
                                   </div>
-                                  <div class="panel-body text-center">
-                                    <p>{{ product.project_name|truncatechars:15 }}</p>
-                                    <p>{{ product.project_desc|truncatechars:10 }}</p>
-                                    <p style="color: #c00000">{{ product.project_platform }}|{{ product.project_price }}</p>
-                                  </div>
-                              </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    暂无数据
+                {% endif %}
             </div>
         </div>
     </div>

@@ -140,7 +140,9 @@ AUTH_USER_MODEL = 'geekuser.GeekUser'
 
 # 多数据库路由配置
 DATABASE_ROUTERS = ['GeekParitySystem.dbrouter.AuthRouter',]
-
+# 分词关键字保存路径
 MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static\\keyword\\product.txt')
+# 分类文件路径
+MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static\\init\\category.json')
 
 QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static\\qrcode\\')
