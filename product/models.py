@@ -57,6 +57,15 @@ class UniqueProduct(Document):
     project_picUrl = StringField()
     # 标签关键字
     tags = ListField()
+    # 关键字状态 0：未分词或分词异常 1：已分词
+    tags_status = IntField()
+    # 设置关键字的人 默认值：Geekview
+    tags_user = ListField(default=['Geekview'])# 设置这个字段是为了后面推出用户自建来分词，并记录用户
+    # 设置关键字的时间
+    tags_time = DateTimeField()
+    tags_status = IntField()
+    # 第一次收录时间
+    first_updated = DateTimeField()
     # 更新时间
     last_updated = DateTimeField()
 

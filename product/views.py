@@ -2,7 +2,7 @@ from django.shortcuts import render,reverse,redirect
 from django.http import JsonResponse
 from django.core import serializers
 from .models import ProductModel,CommentModel,UniqueProduct,Category
-from datetime import datetime
+import datetime
 import jieba,json
 import jieba.analyse
 from GeekParitySystem.settings import MY_SEG_DICT_PATH,MY_CATEGORY_PATH
@@ -64,10 +64,20 @@ def get_product_by_id(request,website_id,original_id):
 
 def get_product_list(request):
     # 关键字查询
-    if request.POST.get('keyword'):
-        keyword = request.POST.get('keyword')
-        product_list = []
+    keyword = request.POST.get('keyword')
+    website_id = request.POST.get('website_id')
+    product_list = []
+    # 只是关键字查询
+    if keyword and not website_id :
         for product in UniqueProduct.objects.all():
+            if keyword in product.tags:
+                product_list.append(product)
+    # 只是平台查询
+    elif website_id and not keyword:
+         product_list = UniqueProduct.objects.filter(website_id=website_id)
+    # 关键字和平台混合查询
+    elif website_id and keyword:
+        for product in UniqueProduct.objects.filter(website_id=website_id):
             if keyword in product.tags:
                 product_list.append(product)
     else:
@@ -76,10 +86,9 @@ def get_product_list(request):
     context['product_list'] = product_list
     return render(request,'product/product_list.html',context)
 
-# 分词分类
+# 分词分类,将抓取的产品信息保留最新的数据到UniqueProduct
 def classify(request):
-    nontags_products = ProductModel.objects.filter(tags_status=0,last_updated__gt=datetime.now().date())
-    # 初始化分类数据
+    # 如果数据库没有分类数据，则初始化分类数据
     if not Category.objects.all():
         with open(MY_CATEGORY_PATH, encoding='UTF-8') as file:
             json_categorylist = json.loads(file.read())
@@ -89,11 +98,16 @@ def classify(request):
                 category.category_name = json_category['category_name']
                 category.tags = json_category['tags']
                 category.save()
-
-    #   避免多次查询数据库
+    #  获取分类数据
     category_tags_dic = {category_id:tags for category_id,tags in Category.objects.all().values_list('category_id','tags')}
+
+    # 获取上一次抓取（抓取频率）的产品数据全部产品数据
+    nontags_products = ProductModel.objects.filter(last_updated__gt=datetime.datetime.now().date() + datetime.timedelta(days=-1))
+    # 更新产品数据
     for product in nontags_products:
-        if not UniqueProduct.objects.filter(original_id=product.original_id,website_id=product.website_id):
+        # 如果未收录，则进行分词分类等
+        unique_product = UniqueProduct.objects.filter(original_id=product.original_id,website_id=product.website_id)
+        if not unique_product:
             # 对没有分类的没每一个产品进行分类
             unique_product = UniqueProduct()
             unique_product.project_name = product['project_name']
@@ -104,10 +118,13 @@ def classify(request):
             unique_product.project_picUrl = product['project_picUrl']
             unique_product.project_score = product['project_score']
             unique_product.project_platform = product['project_platform']
-            # tags = jieba.lcut_for_search(product.project_name)# jieba引擎模式，直接返回list
-            tags = jieba.analyse.extract_tags(product.project_name, topK=20, withWeight=False, allowPOS=())
-            unique_product.tags = tags
+            tags_from_serach = jieba.lcut_for_search(product.project_name)# jieba引擎模式，直接返回list
+            tags = jieba.analyse.extract_tags(product.project_name, topK=20, withWeight=False, allowPOS=()) # 分析模式
+            tags.extend([tag for tag in tags_from_serach if tag not in ('',' ','  ')])
+            # 为了尽可能多的分词，所以就结合两种模式，取并集设立关键字，并去除空格
+            unique_product.tags = list(set(tags))
             unique_product.tags_status = 1
+            unique_product.tags_time = datetime.datetime.now()
             category_list = []
             # 处理产品分类信息
             for category_id,category_tags in category_tags_dic.items():
@@ -115,10 +132,15 @@ def classify(request):
                 if list(set(tags).intersection(set(category_tags))):
                     category_list.append(category_id) # 一个产品可能有多个分类
                     unique_product.category_status = 1
-
             unique_product.category_id = category_list
-            unique_product.last_updated = datetime.now()
+            unique_product.last_updated = datetime.datetime.now()
             unique_product.save()
+        #     如果已收录但是为分类，则进行分类
+        # elif unique_product.category_status == 0:
+        #     pass
+        # 如果已收录已分类，则直接更新价格数据等等
+        else:
+            unique_product.update(project_price=product['project_price'], project_score = product['project_score'])
     return redirect(reverse('home',args=[]))
 
 # 菜单获取产品列表
