@@ -146,3 +146,5 @@ MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static\\keyword\\product.txt')
 MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static\\init\\category.json')
 
 QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static\\qrcode\\')
+
+ENABLE_WEBSITE_DIC = {'xiaomi':1,'wangyi':2}

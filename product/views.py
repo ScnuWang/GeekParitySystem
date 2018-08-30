@@ -1,11 +1,12 @@
 from django.shortcuts import render,reverse,redirect
 from django.http import JsonResponse
 from django.core import serializers
+from django.core.exceptions import ObjectDoesNotExist
 from .models import ProductModel,CommentModel,UniqueProduct,Category
 import datetime
 import jieba,json
 import jieba.analyse
-from GeekParitySystem.settings import MY_SEG_DICT_PATH,MY_CATEGORY_PATH
+from GeekParitySystem.settings import MY_SEG_DICT_PATH,MY_CATEGORY_PATH,ENABLE_WEBSITE_DIC
 jieba.load_userdict(MY_SEG_DICT_PATH)
 
 def get_product_comment_id(request,original_id):
@@ -36,17 +37,8 @@ def get_product(website_id,original_id,keyword):
     return product,product_price_list,product_date_list
 
 def get_product_by_id(request,website_id,original_id):
+    # 获取产品信息
     product, product_price_list, product_date_list = get_product(website_id,original_id,keyword=None)
-    # 其他平台此类产品信息
-    product_name = product.project_name
-    seg_list = jieba.lcut(product_name,cut_all=False)
-    xiaomi_product,xiaomi_product_price_list,xiaomi_product_date_list = None,None,None
-    wangyi_product,wangyi_product_price_list,wangyi_product_date_list = None,None,None
-    for word in seg_list:
-        if jieba.user_word_tag_tab.__contains__(word):
-                xiaomi_product,xiaomi_product_price_list,xiaomi_product_date_list = get_product(keyword=word,website_id=1,original_id=None)
-                wangyi_product,wangyi_product_price_list,wangyi_product_date_list = get_product(keyword=word,website_id=2,original_id=None)
-                break
     # 获取对应的最新评论的前3条
     comments = CommentModel.objects.filter(project_id=original_id,website_id=website_id).order_by('-last_updated').limit(3)
     # print('=====================>',product)
@@ -55,10 +47,6 @@ def get_product_by_id(request,website_id,original_id):
     context['comments'] = comments
     context['product_price_list'] = product_price_list
     context['product_date_list'] = product_date_list
-    context['xiaomi_product'] = xiaomi_product
-    context['xiaomi_product_price_list'] = xiaomi_product_price_list
-    context['wangyi_product'] = wangyi_product
-    context['wangyi_product_price_list'] = wangyi_product_price_list
     return render(request,'product/product_detail.html',context)
 
 
