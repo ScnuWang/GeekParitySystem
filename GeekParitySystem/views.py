@@ -13,6 +13,7 @@ def home(request):
     products = {'xiaomi':product_list_1,'wangyi':product_list_2}
     context = {}
     # 轮播图展示产品 : 小米第一个作为默认激活产品；小米网易各取两个产品
+    # 后续调整一下数据
     context['product_Carousel_active'] = product_list_1[0] # 默认激活
     product_Carousel_list = []
     product_Carousel_list.append(product_list_1[1])
