@@ -2,22 +2,24 @@ from django.shortcuts import render,redirect,reverse
 from .forms import LoginForm,RegistForm
 from django.contrib import auth
 from geekuser.models import GeekUser,GeekCode
-from product.models import ProductModel
+from product.models import UniqueProduct
 from .settings import QRCODE_IMAGE_PATH
 import qrcode,uuid
 
 # 首页
 def home(request):
-    product_list_1 = ProductModel.objects.filter(website_id=1).order_by('-last_updated').limit(8)
-    product_list_2 = ProductModel.objects.filter(website_id=2).order_by('-last_updated').limit(8)
+    product_list_1 = UniqueProduct.objects.filter(website_id=1).order_by('-last_updated').limit(8)
+    product_list_2 = UniqueProduct.objects.filter(website_id=2).order_by('-last_updated').limit(8)
     products = {'xiaomi':product_list_1,'wangyi':product_list_2}
     context = {}
     # 轮播图展示产品 : 小米第一个作为默认激活产品；小米网易各取两个产品
-    # 后续调整一下数据
-    context['product_Carousel_active'] = product_list_1[0] # 默认激活
+    # 后续根据需要调整一下数据
+    product_list_3 = UniqueProduct.objects.filter(website_id=1).order_by('-project_price')
+    product_list_4 = UniqueProduct.objects.filter(website_id=2).order_by('-project_price')
+    context['product_Carousel_active'] = product_list_3[0] # 默认激活
     product_Carousel_list = []
-    product_Carousel_list.append(product_list_1[1])
-    product_Carousel_list.extend(product_list_2[0:2])
+    product_Carousel_list.append(product_list_3[1])
+    product_Carousel_list.extend(product_list_4[0:2])
     context['product_Carousel_list'] = product_Carousel_list # 默认激活
     context['products'] = products
     return render(request,'index.html',context)
