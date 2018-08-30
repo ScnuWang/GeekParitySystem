@@ -1,7 +1,6 @@
 from django.shortcuts import render,reverse,redirect
 from django.http import JsonResponse
 from django.core import serializers
-from django.core.exceptions import ObjectDoesNotExist
 from .models import ProductModel,CommentModel,UniqueProduct,Category
 import datetime
 import jieba,json
