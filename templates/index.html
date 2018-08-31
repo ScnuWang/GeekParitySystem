@@ -287,24 +287,18 @@
                     </li>
                 </ul>
             </div>
+
             <div class="col-md-9">
                 {#        轮播#}
-                {% if products %}
+                {% if product_Carousel_active %}
                     <div id="myCarousel" class="carousel slide">
-                        <!-- 轮播（Carousel）指标 -->
-                        <ol class="carousel-indicators">
-                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                            <li data-target="#myCarousel" data-slide-to="1"></li>
-                            <li data-target="#myCarousel" data-slide-to="2"></li>
-                            <li data-target="#myCarousel" data-slide-to="3"></li>
-                        </ol>
                         <!-- 轮播（Carousel）项目 -->
                         <div class="carousel-inner">
                             {% if product_Carousel_active %}
                                 <div class="item active">
                                     <a href="{% url 'product:product_detail' product_Carousel_active.website_id product_Carousel_active.original_id  %}">
                                         <img class="center-block" src="{{ product_Carousel_active.project_picUrl }}" alt="Geek View">
-                                        <div class="carousel-caption">{{ product_Carousel_active.project_name|truncatechars:10 }}</div>
+                                        <div class="carousel-caption">{{ product_Carousel_active.project_name }}</div>
                                     </a>
                                 </div>
                             {% endif %}
@@ -312,7 +306,7 @@
                                 <div class="item">
                                     <a href="{% url 'product:product_detail' product.website_id product.original_id  %}">
                                         <img class="center-block" src="{{ product.project_picUrl }}" alt="Geek View">
-                                        <div class="carousel-caption">{{ product.project_name|truncatechars:10 }}</div>
+                                        <div class="carousel-caption">{{ product.project_name }}</div>
                                     </a>
                                 </div>
                             {% endfor %}
