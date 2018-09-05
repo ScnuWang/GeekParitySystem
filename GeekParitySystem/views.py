@@ -12,16 +12,20 @@ def home(request):
     product_list_2 = UniqueProduct.objects.filter(website_id=2).order_by('-last_updated').limit(8)
     products = {'xiaomi':product_list_1,'wangyi':product_list_2}
     context = {}
+    context['products'] = products
+    context['product_Carousel_active'] = None
+    context['product_Carousel_list'] = None
     # 轮播图展示产品 : 小米第一个作为默认激活产品；小米网易各取两个产品
     # 后续根据需要调整一下数据
     product_list_3 = UniqueProduct.objects.filter(website_id=1).order_by('-project_price')
     product_list_4 = UniqueProduct.objects.filter(website_id=2).order_by('-project_price')
-    context['product_Carousel_active'] = product_list_3[0] # 默认激活
-    product_Carousel_list = []
-    product_Carousel_list.append(product_list_3[1])
-    product_Carousel_list.extend(product_list_4[0:2])
-    context['product_Carousel_list'] = product_Carousel_list # 默认激活
-    context['products'] = products
+    if product_list_3 and product_list_4:
+        context['product_Carousel_active'] = product_list_3[0] # 默认激活
+        product_Carousel_list = []
+        product_Carousel_list.append(product_list_3[1])
+        product_Carousel_list.extend(product_list_4[0:2])
+        context['product_Carousel_list'] = product_Carousel_list # 默认激活
+
     return render(request,'index.html',context)
 
 # 处理登录相关

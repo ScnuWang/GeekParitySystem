@@ -25,7 +25,7 @@ SECRET_KEY = '$28yj#us=%nq==62e+mr%(-wrh90ndkhm#d#w$-09)whdt5kbt'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'geekparity',
         'USER': 'root',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
     },
     'mongo_db':{
@@ -132,8 +132,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# 用于为了部署搜集静态文件
+STATIC_ROOT = "/var/parity.geekview.cn/static/"
+
 # 静态文件目录路径  : 需要添加这个在能使用智能提示静态文件的路径
-STATICFILES_DIRS = [os.path.join(BASE_DIR,'static'),]
+STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]
 
 # 使用自己的GeekUser模型:geekuser表示APP的名称
 AUTH_USER_MODEL = 'geekuser.GeekUser'
@@ -141,10 +144,10 @@ AUTH_USER_MODEL = 'geekuser.GeekUser'
 # 多数据库路由配置
 DATABASE_ROUTERS = ['GeekParitySystem.dbrouter.AuthRouter',]
 # 分词关键字保存路径
-MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static\\keyword\\product.txt')
+MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static/keyword/product.txt')
 # 分类文件路径
-MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static\\init\\category.json')
-
-QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static\\qrcode\\')
-
+MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static/init/category.json')
+# 邀请码二维码存放路径
+QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static/qrcode/')
+# 平台编号字典
 ENABLE_WEBSITE_DIC = {'xiaomi':1,'wangyi':2}
