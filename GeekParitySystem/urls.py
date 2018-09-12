@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from .views import home,login,regist,logout,get_invation_qrcode
+from .views import home,login,regist,logout,get_invation_qrcode,wechat_login,wechat_logout,check_login,send_text
 
 urlpatterns = [
     path('', home, name='home'),
@@ -25,5 +25,9 @@ urlpatterns = [
     path('regist', regist, name='regist'),
     path('logout', logout, name='logout'),
     path('get_invation_qrcode', get_invation_qrcode, name='get_invation_qrcode'),
+    path('wechat_login', wechat_login, name='wechat_login'),
+    path('wechat_logout', wechat_logout, name='wechat_logout'),
+    path('check_login', check_login, name='check_login'),
+    path('send_text/<str:uuid>/<str:NickName>/<str:UserName>', send_text, name='send_text'),
     # path('accounts/', include('django.contrib.auth.urls')),
 ]

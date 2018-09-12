@@ -1,10 +1,107 @@
-from django.shortcuts import render,redirect,reverse
+from django.shortcuts import render,redirect,reverse,render_to_response
+from django.http import JsonResponse
 from .forms import LoginForm,RegistForm
 from django.contrib import auth
-from geekuser.models import GeekUser,GeekCode
+from geekuser.models import GeekUser,GeekCode,GeekWechatUser
 from product.models import UniqueProduct
-from .settings import QRCODE_IMAGE_PATH
-import qrcode,uuid
+from .settings import QRCODE_IMAGE_PATH,USER_AGENT
+import qrcode,uuid,itchat,os,time,requests,re,random,xml,json
+from django.views.decorators.csrf import csrf_exempt
+# 由于itchat对象不能直接通过json序列化，后续进行用户登录信息的时候回用到，所以保留全局变量，通过登录时的uuid查询
+instancesDic = {}
+
+# 登录成功后进行处理
+# args: 用户的uuid编号
+def login_success(*args):
+    print('登录成功')
+    if args:
+        pngname = args[0] + '.png'
+        os.remove(pngname)
+        print('删除登录二维码图片')
+
+# 处理微信登录
+def wechat_login(request):
+    newInstance = itchat.new_instance()
+    # 获取uuid
+    while not newInstance.get_QRuuid():
+        time.sleep(1)
+    # 下载微信二维码
+    newInstance.get_QR(enableCmdQR=False,picDir=QRCODE_IMAGE_PATH, qrCallback=None)
+    uuid = newInstance.uuid
+    instancesDic[uuid] = newInstance
+    data = {'qrcode_uuid':uuid,'msg':'操作成功','msg_code':100000}
+    return  JsonResponse(data)
+
+# 检查登录状态
+def check_login(request):
+    result = {'msg_code': 100001, 'msg': '登录异常'}
+
+    # 判断是否包含邀请码
+    invation_code = None
+    try:
+        invation_code = request.GET['invation_code']
+    except:
+        pass
+
+    if request.GET['uuid']:
+        # 根据uuid查询微信登录相关实例
+        uuid = request.GET['uuid']
+        itchat_instance = instancesDic[uuid]
+        status = itchat_instance.check_login()
+        if status == '200':
+            itchat_instance.web_init()
+            itchat_instance.show_mobile_login()
+            itchat_instance.get_contact(True)
+            # 获取登录用户的个人信息
+            nickName = itchat_instance.loginInfo['User']['NickName']
+            # 微信好友列表 (不存入数据库)
+            memberList = itchat_instance.memberList
+            # 只有wxuin保持不变，并且每个微信号唯一不同
+            wxuin = itchat_instance.loginInfo['wxuin']
+            # 保留用户基本信息到数据库
+            # 判断是否注册
+            wechat_user = GeekWechatUser.objects.filter(wxuin=wxuin).first()
+            if not wechat_user:
+                wechat_user = GeekWechatUser()
+                wechat_user.wxuin = wxuin
+                wechat_user.nick_name = nickName
+                wechat_user.invation_code = GeekCode.objects.filter(is_available=True).first().invation_code
+                # 判断父邀请码是否有效
+                if GeekCode.objects.filter(invation_code=invation_code,is_available=False):
+                    # 添加新用户的父邀请码
+                    wechat_user.par_invation_code = invation_code
+                    # 同时给邀请者添加子邀请码并保存
+                    invator_user = GeekWechatUser.objects.get(invation_code=invation_code)
+                    invator_user.sub_invation_code = wechat_user.invation_code
+                    invator_user.save()
+                # 判断是否是被人邀请的，判断父邀请码
+                wechat_user.save()
+
+                # 修改邀请码状态
+                GeekCode.objects.filter(invation_code=wechat_user.invation_code).update(is_available=False)
+            # 将用户信息数据放入模板
+            wechat_user.memberList = memberList[1:]
+            wechat_user.uuid = uuid
+            context = {}
+            context['wechat_user'] = wechat_user
+            # 登录成功，重新渲染首页
+            return render(request,'index.html', context)
+    else:
+        # 登录异常，请重新登录：通过返回特定参数，启动jquery打开二维码扫描页面
+        pass
+
+# 发送文本消息
+def send_text(request,uuid,NickName,UserName):
+    print(UserName)
+    itchat_instance = instancesDic[uuid]
+    msg = NickName + ', 我正在使用极客比价，邀请你也来试一下，现在注册有奖，先来薅一波羊毛再说。。。立即使用微信扫码登录：http://locahost:80?invation_code=f91c728a'
+    itchat_instance.send(msg,toUserName=UserName)
+    return render(request,'index.html', {})
+
+def wechat_logout(request):
+    itchat.logout()
+    data = {'msg':'操作成功','msg_code':100000}
+    return JsonResponse(data)
 
 # 首页
 def home(request):

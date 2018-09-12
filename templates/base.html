@@ -66,7 +66,71 @@
                     </div>
                   </div>
                 </div>
+{#                微信登录#}
+            {% elif wechat_user %}
+                <button id="wechat_logout" type="submit" class="btn btn-primary btn-lg pull-right" >微信注销</button>
+
+                <button type="button" style="margin-right: 1em" class="btn btn-primary btn-lg pull-right"data-toggle="modal" data-target="#wechat_user_info">
+                  个人信息
+                </button>
+
+                <p class="pull-right" style="margin-right: 1em"><span class="glyphicon glyphicon-user" style="margin-right: 1em;margin-top: 1em" aria-hidden="true"></span>{{ wechat_user.nick_name }}</p>
+
+                <div class="modal fade" id="wechat_user_info" tabindex="-1" role="dialog" aria-labelledby="userInfoLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="userInfoLabel">个人信息</h4>
+                      </div>
+                      <div class="modal-body">
+                          <ul class="list-group">
+                              <li class="list-group-item"><label class="col-sm-2 control-label">用户名：</label>{{ wechat_user.nick_name }}</li>
+                              <li class="list-group-item"><label class="col-sm-2 control-label">邀请码：</label>{{ wechat_user.invation_code }}</li>
+                              <li class="list-group-item"><label class="col-sm-2 control-label">父邀请码：</label>{{ wechat_user.par_invation_code }}</li>
+                              <li class="list-group-item"><label class="col-sm-2 control-label">子邀请码：</label>{{ wechat_user.sub_invation_code }}</li>
+                          </ul>
+                          <label>邀请好友：</label>
+                          <div class="list-group">
+                              {% for friend in wechat_user.memberList %}
+                                  <a href="{% url 'send_text' wechat_user.uuid friend.NickName friend.UserName %}" class="list-group-item">
+                                    {{ friend.NickName }}
+                                    <button type="button" class="btn btn-default pull-right" >发送邀请</button>
+                                  </a>
+                              {% endfor %}
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             {% else %}
+                <button id="load_qrcode" type="button" style="margin-right: 1em" class="btn btn-primary btn-lg pull-right"data-toggle="modal" data-target="#wechat_login">
+                  微信登录
+                </button>
+                <div class="modal fade" id="wechat_login" tabindex="-1" role="dialog" aria-labelledby="wechat_loginLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="wechat_loginLabel">微信扫描二维码登录</h4>
+                      </div>
+                      <div class="modal-body">
+                        <div class="container text-center" style="padding-left: 30%">
+                            <img id="qrcode_img" class="img-responsive img-thumbnail" style="width: 200px;height: 200px" src="{% static 'image/loading.gif' %}">
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                           <a href="" id="scan_finish">
+                                <button type="submit" class="btn btn-default btn-lg pull-right" >扫描并确认登录完成</button>
+                            </a>
+{#                        <button id="scan_finish" type="button" class="btn btn-default btn-lg" >扫描并确认登录完成</button>#}
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <a href="{% url 'login' %}">
                     <button type="submit" class="btn btn-default btn-lg pull-right" >登录</button>
                 </a>
@@ -114,8 +178,34 @@
     </div>
 {% endblock %}
 {% block content %}{% endblock %}
+{% block footer %}{% endblock %}
+<script type="text/javascript">
+    $("#load_qrcode").click(function () {
+        {# 通过ajax发起登录请求获取登录二维码图片名称（修改itchat源码之后，使用登录时的uuid给图片命名） #}
+         $.get("/wechat_login",function(resp,status){
+             if (status == "success") {
+                 uuid = resp['qrcode_uuid'];
+                 {# 获取登录二维码图片#}
+                 $("#qrcode_img").attr("src","static/qrcode/"+uuid+".png");
+                 {#alert(window.location.search)#}
+                 {# 登录校验#}
+                 if (window.location.search.includes("invation_code=")){
+                    $("#scan_finish").attr("href","/check_login"+window.location.search+"&uuid="+uuid+"&");
+                 }else {
+                     $("#scan_finish").attr("href","/check_login?uuid="+uuid+"&");
+                 }
+             }
+          });
+    });
 
-{% block footer %}
-{% endblock %}
+    $("#wechat_logout").click(function () {
+        {# 通过ajax发起登录请求获取登录二维码图片名称（修改itchat源码之后，使用登录时的uuid给图片命名） #}
+         $.get("/wechat_logout",function(data,status){
+             if (status == "success") {
+                 alert("注销成功！")
+             }
+          });
+    });
+</script>
 </body>
 </html>

@@ -151,3 +151,5 @@ MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static/init/category.json')
 QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static/qrcode/')
 # 平台编号字典
 ENABLE_WEBSITE_DIC = {'xiaomi':1,'wangyi':2}
+
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.71 Safari/537.36'
