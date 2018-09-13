@@ -4,9 +4,8 @@ from .forms import LoginForm,RegistForm
 from django.contrib import auth
 from geekuser.models import GeekUser,GeekCode,GeekWechatUser
 from product.models import UniqueProduct
-from .settings import QRCODE_IMAGE_PATH,USER_AGENT
-import qrcode,uuid,itchat,os,time,requests,re,random,xml,json
-from django.views.decorators.csrf import csrf_exempt
+from .settings import QRCODE_IMAGE_PATH
+import qrcode,uuid,itchat,os,time
 # 由于itchat对象不能直接通过json序列化，后续进行用户登录信息的时候回用到，所以保留全局变量，通过登录时的uuid查询
 instancesDic = {}
 
@@ -90,12 +89,15 @@ def check_login(request):
         # 登录异常，请重新登录：通过返回特定参数，启动jquery打开二维码扫描页面
         pass
 
-# 发送文本消息
-def send_text(request,uuid,NickName,UserName):
-    print(UserName)
+# 发送消息,根据发送消息类型
+def send(request,uuid,NickName,UserName,msg_type):
     itchat_instance = instancesDic[uuid]
-    msg = NickName + ', 我正在使用极客比价，邀请你也来试一下，现在注册有奖，先来薅一波羊毛再说。。。立即使用微信扫码登录：http://locahost:80?invation_code=f91c728a'
-    itchat_instance.send(msg,toUserName=UserName)
+    if msg_type and msg_type == 1 :
+        msg = NickName + ', 我正在使用极客比价，邀请你也来试一下，现在注册有奖，先来薅一波羊毛再说。。。立即使用微信扫码登录：http://locahost:80?invation_code=f91c728a'
+        itchat_instance.send(msg,toUserName=UserName)
+    if msg_type and msg_type == 2 :
+        image = '图片文件路径'
+        itchat_instance.send_image(image,toUserName=UserName)
     return render(request,'index.html', {})
 
 def wechat_logout(request):
