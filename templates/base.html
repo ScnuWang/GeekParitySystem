@@ -95,10 +95,10 @@
                               {% for friend in wechat_user.memberList %}
                                   <li class="list-group-item">
                                       {{ friend.NickName }}
-                                      <a href="{% url 'send_text' wechat_user.uuid friend.NickName friend.UserName 1 %}">
+                                      <a href="{% url 'send_text' wechat_user.uuid friend.NickName friend.UserName wechat_user.invation_code 1 %}">
                                           <button class="btn btn-primary pull-right">发送邀请链接</button>
                                       </a>
-                                      <a href="{% url 'send_text' wechat_user.uuid friend.NickName friend.UserName 2 %}">
+                                      <a href="{% url 'send_text' wechat_user.uuid friend.NickName friend.UserName wechat_user.invation_code 2 %}">
                                           <button class="btn btn-info pull-right">发送邀请海报</button>
                                       </a>
                                   </li>

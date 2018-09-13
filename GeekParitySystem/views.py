@@ -1,11 +1,14 @@
-from django.shortcuts import render,redirect,reverse,render_to_response
+from django.shortcuts import render,redirect,reverse
 from django.http import JsonResponse
+from django.forms import model_to_dict
 from .forms import LoginForm,RegistForm
 from django.contrib import auth
 from geekuser.models import GeekUser,GeekCode,GeekWechatUser
 from product.models import UniqueProduct
-from .settings import QRCODE_IMAGE_PATH
+from .settings import QRCODE_IMAGE_PATH,IMAGE_PATH
 import qrcode,uuid,itchat,os,time
+from .utils import PostMaker,getQRcode
+
 # 由于itchat对象不能直接通过json序列化，后续进行用户登录信息的时候回用到，所以保留全局变量，通过登录时的uuid查询
 instancesDic = {}
 
@@ -84,21 +87,43 @@ def check_login(request):
             context = {}
             context['wechat_user'] = wechat_user
             # 登录成功，重新渲染首页
-            return render(request,'index.html', context)
+            wechat_user = model_to_dict(wechat_user)
+            # return redirect(reverse('home', kwargs=wechat_user))
+            return render(request,'index.html',context)
     else:
         # 登录异常，请重新登录：通过返回特定参数，启动jquery打开二维码扫描页面
         pass
 
-# 发送消息,根据发送消息类型
-def send(request,uuid,NickName,UserName,msg_type):
+# 根据发送消息类型
+def send(request, uuid, NickName, UserName, invation_code, msg_type):
+    """
+    :param request:
+    :param uuid: 登录时微信分配的uuid
+    :param NickName: 用户昵称
+    :param UserName: 登录时微信分配的用户名
+    :param invation_code: 邀请码
+    :param msg_type: 消息类型 1: 文字信息 2：图片信息
+    :return:
+    """
     itchat_instance = instancesDic[uuid]
+    invation_url = 'http://1670a21b58.imwork.net?invation_code='+ invation_code
     if msg_type and msg_type == 1 :
-        msg = NickName + ', 我正在使用极客比价，邀请你也来试一下，现在注册有奖，先来薅一波羊毛再说。。。立即使用微信扫码登录：http://locahost:80?invation_code=f91c728a'
+        msg = NickName + ', 我正在使用极客比价，你也来试试吧，立即前往：'+invation_url+' 微信扫码登录！'
         itchat_instance.send(msg,toUserName=UserName)
     if msg_type and msg_type == 2 :
-        image = '图片文件路径'
-        itchat_instance.send_image(image,toUserName=UserName)
-    return render(request,'index.html', {})
+        backImg = IMAGE_PATH + 'post_back_image.png'
+        font = IMAGE_PATH + 'msyhl.ttc'
+        pMaker = PostMaker(backImg=backImg, font=font)
+
+        # 包含邀请链接的图片文件路径
+        qrImg = IMAGE_PATH + uuid + '.png'
+        getQRcode(invation_url,qrImg)
+        # 海报的文件路径
+        post_image = IMAGE_PATH + invation_code + '.png'
+        pMaker.create(userName = NickName,qrImg = qrImg,textColor={'R': 0, 'G': 0, 'B': 0},file_name= post_image)
+        # 发送海报
+        itchat_instance.send_image(post_image,toUserName=UserName)
+    return redirect(reverse('home', args=[]))
 
 def wechat_logout(request):
     itchat.logout()

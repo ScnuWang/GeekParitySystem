@@ -150,5 +150,7 @@ MY_SEG_DICT_PATH = os.path.join(BASE_DIR,'static/keyword/product.txt')
 MY_CATEGORY_PATH = os.path.join(BASE_DIR,'static/init/category.json')
 # 邀请码二维码存放路径
 QRCODE_IMAGE_PATH = os.path.join(BASE_DIR,'static/qrcode/')
+# 图片存放路径
+IMAGE_PATH = os.path.join(BASE_DIR,'static/image/')
 # 平台编号字典
 ENABLE_WEBSITE_DIC = {'xiaomi':1,'wangyi':2}

@@ -28,6 +28,6 @@ urlpatterns = [
     path('wechat_login', wechat_login, name='wechat_login'),
     path('wechat_logout', wechat_logout, name='wechat_logout'),
     path('check_login', check_login, name='check_login'),
-    path('send/<str:uuid>/<str:NickName>/<str:UserName>/<int:msg_type>', send, name='send_text'),
+    path('send/<str:uuid>/<str:NickName>/<str:UserName>/<str:invation_code>/<int:msg_type>', send, name='send_text'),
     # path('accounts/', include('django.contrib.auth.urls')),
 ]
