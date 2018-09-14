@@ -112,7 +112,7 @@
                   </div>
                 </div>
             {% else %}
-                <button id="load_qrcode" type="button" style="margin-right: 1em" class="btn btn-primary btn-lg pull-right"data-toggle="modal" data-target="#wechat_login">
+                <button id="load_qrcode" type="button" style="margin-right: 1em; margin-left: 1em" class="btn btn-primary btn-lg pull-right"data-toggle="modal" data-target="#wechat_login">
                   微信登录
                 </button>
                 <div class="modal fade" id="wechat_login" tabindex="-1" role="dialog" aria-labelledby="wechat_loginLabel">
@@ -172,8 +172,8 @@
                 {% csrf_token %}
                 <div class="form-group">
                   <input type="text" class="form-control" name="keyword" placeholder="关键词">
-                  小米有品：<input type="radio" class="form-control" value="1" name="website_id" >
-                  网易严选：<input type="radio" class="form-control" value="2" name="website_id" >
+                  小米有品：<input type="checkbox" value="1" name="website_id" >
+                  网易严选：<input type="checkbox" value="2" name="website_id" >
                 </div>
                 <button type="submit" class="btn btn-primary">搜索</button>
               </form>

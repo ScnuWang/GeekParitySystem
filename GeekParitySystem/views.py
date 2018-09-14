@@ -78,7 +78,6 @@ def check_login(request):
                     invator_user.save()
                 # 判断是否是被人邀请的，判断父邀请码
                 wechat_user.save()
-
                 # 修改邀请码状态
                 GeekCode.objects.filter(invation_code=wechat_user.invation_code).update(is_available=False)
             # 将用户信息数据放入模板
