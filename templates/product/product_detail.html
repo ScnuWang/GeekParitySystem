@@ -118,4 +118,66 @@
             </div>
         </div>
     </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div id="container_Cylindrical" ></div>
+                <script>
+                   Highcharts.chart('container_Cylindrical', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: '该商品同类信息比较'
+                        },
+                        subtitle: {
+                            text: '数据来源: <a href="http://www.geekview.cn">极客视界</a>.'
+                        },
+                        xAxis: {
+                            type: 'category'
+                        },
+                        yAxis: {
+                            title: {
+                                text: ''
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        plotOptions: {
+                            series: {
+                                borderWidth: 0,
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '{point.y:.1f}'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            {#headerFormat: '<span style="font-size:11px">{series.name}</span><br>',#}
+                            headerFormat: '',
+                            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                        },
+                        series: [{
+                            name: '',
+                            colorByPoint: true,
+                            data: [{
+                                name: '人气值',
+                                y: {{ people_support }}
+                            }, {
+                                name: '最低价',
+                                y: {{ product_price_min }}
+                            }, {
+                                name: '最高价',
+                                y: {{ product_price_max }}
+                            }, {
+                                name: '本产品',
+                                y: {{ product.project_price }}
+                            }]
+                        }]
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
 {% endblock %}
