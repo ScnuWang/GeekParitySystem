@@ -47,9 +47,9 @@ def get_product_by_id(request,website_id,original_id):
     product_price_max,product_price_min = 0.0, 0.0
     if unique_product:
         # unique = UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('-project_price')
-        product_price_max =  UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('-project_price').first().project_price
+        product_price_max =  UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('-project_price').first()
         # 不知道为什么提示：'QuerySet' object has no attribute 'last'
-        product_price_min =  UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('project_price').first().project_price
+        product_price_min =  UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('project_price').first()
     # 未分类
     context = {}
     context['product'] = product
@@ -154,14 +154,9 @@ def classify_for_product(unique_product):
 
 # 菜单获取产品列表
 def get_products_by_category(request,category_id):
-    product_list_1 = []
-    product_list_2 = []
-    for product in UniqueProduct.objects.all():
-        if category_id in  product.category_id and product.website_id == 1:
-            product_list_1.append(product)
-        if category_id in  product.category_id and product.website_id == 2:
-            product_list_2.append(product)
-    products = {'xiaomi': product_list_1, 'wangyi': product_list_2}
+    product_list_xiaomi = UniqueProduct.objects.filter(website_id=1,category_id=category_id )
+    product_list_wangyi = UniqueProduct.objects.filter(website_id=2,category_id=category_id )
+    products = {'xiaomi': product_list_xiaomi, 'wangyi': product_list_wangyi}
     context = {}
     context['products'] = products
     return render(request, 'index.html', context)

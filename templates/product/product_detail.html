@@ -133,6 +133,7 @@
                         subtitle: {
                             text: '数据来源: <a href="http://www.geekview.cn">极客视界</a>.'
                         },
+                        credits:{enabled:false},
                         xAxis: {
                             type: 'category'
                         },
@@ -156,23 +157,36 @@
                         tooltip: {
                             {#headerFormat: '<span style="font-size:11px">{series.name}</span><br>',#}
                             headerFormat: '',
-                            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b><br/>'
+                            pointFormat: '<a href="{point.product_url}"><span style="color:#000000">{point.product_name}</span>: <b>{point.y:.2f}</b></a><br/>'
                         },
                         series: [{
                             name: '',
                             colorByPoint: true,
                             data: [{
-                                name: '人气值',
-                                y: {{ people_support }}
-                            }, {
                                 name: '最低价',
-                                y: {{ product_price_min }}
+                                product_name:"{{ product_price_min.project_name|safe }}",
+                                product_url:"{{ product_price_min.product_url|safe }}",
+                                y: {{ product_price_min.project_price }},
+                                color: '#338FCC'
                             }, {
                                 name: '最高价',
-                                y: {{ product_price_max }}
+                                product_name:"{{ product_price_max.project_name|safe }}",
+                                product_url:"{{ product_price_max.product_url|safe }}",
+                                y: {{ product_price_max.project_price }},
+                                color: '#33ccff'
                             }, {
                                 name: '本产品',
-                                y: {{ product.project_price }}
+                                product_name:"{{ product.project_name|safe }}",
+                                product_url:"{{ product.product_url|safe }}",
+                                y: {{ product.project_price }},
+                                color: '#339966'
+                            },{
+                                name: '人气值',
+                                {#可以自定义属性，通过point来获取对应属性的值#}
+                                product_name:"{{ product.project_name|safe }}",
+                                product_url:"{{ product.product_url|safe }}",
+                                y: {{ people_support }},
+                                color: '#006666'
                             }]
                         }]
                     });
