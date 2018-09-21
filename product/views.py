@@ -120,6 +120,7 @@ def classify(request):
             unique_product.project_picUrl = product['project_picUrl']
             unique_product.project_score = product['project_score']
             unique_product.project_platform = product['project_platform']
+            unique_product.comment_count = product['comment_count']
             tags_from_serach = jieba.lcut_for_search(product.project_name)# jieba引擎模式，直接返回list
             tags = jieba.analyse.extract_tags(product.project_name, topK=20, withWeight=False, allowPOS=()) # 分析模式
             # 为了尽可能多的分词，所以就结合两种模式，取并集设立关键字，并去除空格

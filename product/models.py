@@ -29,6 +29,8 @@ class ProductModel(Document):
     tags_time = DateTimeField()
     # 关键字状态 0：未分词或分词异常 1：已分词
     tags_status = IntField()
+    # 评论数
+    comment_count = IntField()
     # 更新时间
     last_updated = DateTimeField()
 
