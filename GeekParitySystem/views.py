@@ -67,7 +67,10 @@ def check_login(request):
                 wechat_user = GeekWechatUser()
                 wechat_user.wxuin = wxuin
                 wechat_user.nick_name = nickName
-                wechat_user.invation_code = GeekCode.objects.filter(is_available=True).first().invation_code
+                geekcode = GeekCode.objects.filter(is_available=True).first()
+                if not geekcode:
+                    generate_invation_code()
+                wechat_user.invation_code = geekcode.invation_code
                 # 判断父邀请码是否有效
                 if GeekCode.objects.filter(invation_code=invation_code,is_available=False):
                     # 添加新用户的父邀请码
