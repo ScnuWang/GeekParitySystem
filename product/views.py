@@ -58,7 +58,6 @@ def get_product_by_id(request,website_id,original_id):
     context['product_price_list'] = product_price_list
     context['product_date_list'] = product_date_list
     # 柱形图数据
-    context['people_support'] = len(comments)
     context['product_price_max'] = product_price_max
     context['product_price_min'] = product_price_min
     return render(request,'product/product_detail.html',context)
@@ -144,12 +143,6 @@ def classify(request):
         else:
             unique_product.update(project_price=product['project_price'], project_score = product['project_score'])
     return redirect(reverse('home',args=[]))
-
-# 对某个产品进行分类
-def classify_for_product(unique_product):
-    pass
-
-
 
 
 # 菜单获取产品列表

@@ -65,6 +65,8 @@ class UniqueProduct(Document):
     # 设置关键字的时间
     tags_time = DateTimeField()
     tags_status = IntField()
+    # 评论数
+    comment_count = IntField()
     # 第一次收录时间
     first_updated = DateTimeField()
     # 更新时间
