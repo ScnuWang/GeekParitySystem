@@ -75,7 +75,6 @@ class UniqueProduct(Document):
 class CommentModel(Document):
     # 指定collection
     meta = {'collection': 'comments'}
-
     # 产品归属平台  (网易：1；小米：2)
     website_id = IntField()
     # 产品编号
