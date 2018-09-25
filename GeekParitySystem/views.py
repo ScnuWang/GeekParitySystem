@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.forms import model_to_dict
 from .forms import LoginForm,RegistForm
 from django.contrib import auth
-from geekuser.models import GeekUser,GeekCode,GeekWechatUser
+from geekuser.models import GeekUser,GeekCode
 from product.models import UniqueProduct
 from .settings import QRCODE_IMAGE_PATH,IMAGE_PATH
 import qrcode,uuid,itchat,os,time
@@ -36,15 +36,12 @@ def wechat_login(request):
 
 # 检查登录状态
 def check_login(request):
-    result = {'msg_code': 100001, 'msg': '登录异常'}
-
     # 判断是否包含邀请码
-    invation_code = None
+    par_invation_code = None
     try:
-        invation_code = request.GET['invation_code']
+        par_invation_code = request.GET['invation_code']
     except:
         pass
-
     if request.GET['uuid']:
         # 根据uuid查询微信登录相关实例
         uuid = request.GET['uuid']
@@ -62,37 +59,40 @@ def check_login(request):
             wxuin = itchat_instance.loginInfo['wxuin']
             # 保留用户基本信息到数据库
             # 判断是否注册
-            wechat_user = GeekWechatUser.objects.filter(wxuin=wxuin).first()
+            wechat_user = GeekUser.objects.filter(wxuin=wxuin).first()
             if not wechat_user:
-                wechat_user = GeekWechatUser()
+                wechat_user = GeekUser()
                 wechat_user.wxuin = wxuin
                 wechat_user.nick_name = nickName
                 geekcode = GeekCode.objects.filter(is_available=True).first()
+                # 判断是否还有可用邀请码
                 if not geekcode:
-                    # 这里要注意线程安全，后续需要处理一下
+                    # 这里要注意线程安全，后续需要处理一下 ！！！！！！！
                     generate_invation_code()
-                wechat_user.invation_code = GeekCode.objects.filter(is_available=True).first()
+                wechat_user.invation_code = GeekCode.objects.filter(is_available=True).first().invation_code
                 # 判断父邀请码是否有效
-                if GeekCode.objects.filter(invation_code=invation_code,is_available=False):
-                    # 添加新用户的父邀请码
-                    wechat_user.par_invation_code = invation_code
-                    # 同时给邀请者添加子邀请码并保存
-                    invator_user = GeekWechatUser.objects.get(invation_code=invation_code)
+                if GeekCode.objects.filter(invation_code=par_invation_code,is_available=False):
+                    # 给新用户添加父邀请码
+                    wechat_user.par_invation_code = par_invation_code
+                    # 查找邀请者并同时给邀请者添加子邀请码并保存
+                    invator_user = GeekUser.objects.get(invation_code=par_invation_code)
                     invator_user.sub_invation_code = wechat_user.invation_code
                     invator_user.save()
                 # 判断是否是被人邀请的，判断父邀请码
+
+                # 微信用户的用户名为wxuin，密码为invation_code
+                wechat_user.username = wxuin
+                wechat_user.password = wechat_user.invation_code
                 wechat_user.save()
                 # 修改邀请码状态
                 GeekCode.objects.filter(invation_code=wechat_user.invation_code).update(is_available=False)
             # 将用户信息数据放入模板
+            # 这两个字段没有添加到model，所以，前端页面展示不出来
             wechat_user.memberList = memberList[1:]
             wechat_user.uuid = uuid
-            context = {}
-            context['wechat_user'] = wechat_user
-            # 登录成功，重新渲染首页
-            wechat_user = model_to_dict(wechat_user)
-            # return redirect(reverse('home', kwargs=wechat_user))
-            return render(request,'index.html',context)
+            # 采用Django自带授权体系给用户授权
+            auth.login(request, wechat_user)
+            return redirect(reverse('home', args=[]))
     else:
         # 登录异常，请重新登录：通过返回特定参数，启动jquery打开二维码扫描页面
         pass
@@ -127,11 +127,6 @@ def send(request, uuid, NickName, UserName, invation_code, msg_type):
         # 发送海报
         itchat_instance.send_image(post_image,toUserName=UserName)
     return redirect(reverse('home', args=[]))
-
-def wechat_logout(request):
-    itchat.logout()
-    data = {'msg':'操作成功','msg_code':100000}
-    return JsonResponse(data)
 
 # 首页
 def home(request):
