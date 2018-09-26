@@ -44,7 +44,7 @@ def get_product_by_id(request,website_id,original_id):
     # 从分类后的collection中获取某个产品同一类的数据信息
     unique_product = UniqueProduct.objects.filter(original_id=original_id, website_id=website_id,category_status=1).first()
     # 已分类:查询同类产品的最高价，最低价
-    product_price_max,product_price_min = 0.0, 0.0
+    product_price_max,product_price_min = None, None
     if unique_product:
         # unique = UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('-project_price')
         product_price_max =  UniqueProduct.objects.filter(category_id = unique_product.category_id).order_by('-project_price').first()

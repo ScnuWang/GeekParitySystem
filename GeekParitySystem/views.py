@@ -87,9 +87,9 @@ def check_login(request):
                 # 修改邀请码状态
                 GeekCode.objects.filter(invation_code=wechat_user.invation_code).update(is_available=False)
             # 将用户信息数据放入模板
-            # 这两个字段没有添加到model，所以，前端页面展示不出来
-            wechat_user.memberList = memberList[1:]
-            wechat_user.uuid = uuid
+            # 这两个字段没有添加到GeekUser，所以，user对象里面没有保存这两个字段及字段值
+            request.session['memberList'] = memberList[1:]
+            request.session['uuid'] = uuid
             # 采用Django自带授权体系给用户授权
             auth.login(request, wechat_user)
             return redirect(reverse('home', args=[]))
