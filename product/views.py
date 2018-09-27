@@ -62,7 +62,7 @@ def get_product_by_id(request,website_id,original_id):
     context['product_price_min'] = product_price_min
     return render(request,'product/product_detail.html',context)
 
-
+# 查询
 def get_product_list(request):
     # 关键字查询
     keyword = request.POST.get('keyword')
@@ -154,3 +154,13 @@ def get_products_by_category(request,category_id):
     context = {}
     context['products'] = products
     return render(request, 'index.html', context)
+
+# 手动分词分类
+def classify_hand(request):
+    if request.POST:
+        pass
+    # 不是分类表单请求
+    else:
+        context = {}
+        context['nonClassifyProducts'] = UniqueProduct.objects.filter(category_id=0,category_status=0)
+        return render(request, 'product/product_list_for_classify.html', context=context)

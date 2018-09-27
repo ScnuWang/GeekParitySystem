@@ -136,12 +136,12 @@
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="order_04" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                            <li><a href="#">办公周边</a></li>
-                            <li><a href="#">手机周边</a></li>
-                            <li><a href="#">耳机</a></li>
-                            <li><a href="#">电源/电池</a></li>
-                            <li><a href="#">适配器/线材</a></li>
-                            <li><a href="#">电竞</a></li>
+                            <li><a href="{% url 'product:category' 4101 %}">办公周边</a></li>
+                            <li><a href="{% url 'product:category' 4102 %}">手机周边</a></li>
+                            <li><a href="{% url 'product:category' 4103 %}">耳机</a></li>
+                            <li><a href="{% url 'product:category' 4104 %}">电源/电池</a></li>
+                            <li><a href="{% url 'product:category' 4105 %}">适配器/线材</a></li>
+                            <li><a href="{% url 'product:category' 4106 %}">电竞</a></li>
                         </ul>
                     </li>
                     <li>
@@ -150,19 +150,12 @@
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
                         <ul id="order_05" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                            <li><a href="#">T恤</a></li>
-                            <li><a href="#">裤装</a></li>
-                            <li><a href="#">衬衫</a></li>
-                            <li><a href="#">运动/卫衣</a></li>
-                            <li><a href="#">外套</a></li>
-                            <li><a href="#">内衣</a></li>
-                            <li><a href="#">内裤</a></li>
-                            <li><a href="#">家居服</a></li>
-                            <li><a href="#">袜子</a></li>
-                            <li><a href="#">首饰</a></li>
-                            <li><a href="#">手表</a></li>
-                            <li><a href="#">眼镜</a></li>
-                            <li><a href="#">配饰</a></li>
+                            <li><a href="{% url 'product:category' 5101 %}">衣服</a></li>
+                            <li><a href="{% url 'product:category' 5102 %}">裤装</a></li>
+                            <li><a href="{% url 'product:category' 5103 %}">首饰</a></li>
+                            <li><a href="{% url 'product:category' 5104 %}">手表</a></li>
+                            <li><a href="{% url 'product:category' 5105 %}">配饰</a></li>
+                            <li><a href="{% url 'product:category' 5106 %}">箱包</a></li>
                         </ul>
                     </li>
                     <li>
@@ -178,15 +171,9 @@
                                     <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                                 </a>
                                 <ul id="order_06_01" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">厨房电器</a></li>
-                                    <li><a href="#">锅具</a></li>
-                                    <li><a href="#">杯壶</a></li>
-                                    <li><a href="#">刀剪砧板</a></li>
-                                    <li><a href="#">茶咖洒具</a></li>
-                                    <li><a href="#">功能厨具</a></li>
-                                    <li><a href="#">餐具</a></li>
-                                    <li><a href="#">厨房清洁</a></li>
-                                    <li><a href="#">保险收纳</a></li>
+                                    <li><a href="{% url 'product:category' 6101 %}">厨房电器</a></li>
+                                    <li><a href="{% url 'product:category' 6102 %}">厨具餐具</a></li>
+                                    <li><a href="{% url 'product:category' 6103 %}">清洁收纳</a></li>
                                 </ul>
                             </li>
                             <li>
@@ -196,10 +183,9 @@
                                     <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                                 </a>
                                 <ul id="order_06_02" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">方便食品</a></li>
-                                    <li><a href="#">酒水/乳品</a></li>
-                                    <li><a href="#">休闲小食</a></li>
-                                    <li><a href="#">生鲜</a></li>
+                                    <li><a href="{% url 'product:category' 6201 %}">方便食品</a></li>
+                                    <li><a href="{% url 'product:category' 6202 %}">酒水/乳品</a></li>
+                                    <li><a href="{% url 'product:category' 6203 %}">生鲜</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -209,33 +195,9 @@
                             运动健康 / 出行户外
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
-                        <ul id="order_07" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li>
-                                <a href="#order_07_01" class="nav-header collapsed" data-toggle="collapse">
-                                    <i class="glyphicon glyphicon-map-marker"></i>
-                                    运动健康
-                                    <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                                <ul id="order_07_01" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">保健器械</a></li>
-                                    <li><a href="#">康体监护</a></li>
-                                    <li><a href="#">运动健身</a></li>
-                                    <li><a href="#">泳衣泳具</a></li>
-                                    <li><a href="#">护理护具</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#order_07_02" class="nav-header collapsed" data-toggle="collapse">
-                                    <i class="glyphicon glyphicon-phone"></i>
-                                    出行户外
-                                    <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                                <ul id="order_07_02" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">户外</a></li>
-                                    <li><a href="#">骑行</a></li>
-                                    <li><a href="#">汽车用品</a></li>
-                                </ul>
-                            </li>
+                        <ul id="order_07" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
+                            <li><a href="{% url 'product:category' 7101 %}">运动健康</a></li>
+                            <li><a href="{% url 'product:category' 7102 %}">出行户外</a></li>
                         </ul>
                     </li>
                     <li>
@@ -243,44 +205,13 @@
                             洗护美妆 / 母婴亲子
                             <span class="pull-right glyphicon glyphicon-chevron-down"></span>
                         </a>
-                        <ul id="order_08" class="nav nav-list collapse secondmenu" style="height: 0px;">
-                            <li>
-                                <a href="#order_08_01" class="nav-header collapsed" data-toggle="collapse">
-                                    <i class="glyphicon glyphicon-queen"></i>
-                                    洗护美妆
-                                    <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                                <ul id="order_08_01" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">口腔清洁</a></li>
-                                    <li><a href="#">洗护工具</a></li>
-                                    <li><a href="#">毛巾浴巾</a></li>
-                                    <li><a href="#">基础护肤</a></li>
-                                    <li><a href="#">身体护理</a></li>
-                                    <li><a href="#">居家清洁</a></li>
-                                    <li><a href="#">彩妆香氛</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#order_08_02" class="nav-header collapsed" data-toggle="collapse">
-                                    <i class="glyphicon glyphicon-heart-empty"></i>
-                                    母婴亲子
-                                    <span class="pull-right glyphicon glyphicon-chevron-down"></span>
-                                </a>
-                                <ul id="order_08_02" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
-                                    <li><a href="#">玩具</a></li>
-                                    <li><a href="#">出行</a></li>
-                                    <li><a href="#">儿童穿戴</a></li>
-                                    <li><a href="#">婴童服饰</a></li>
-                                    <li><a href="#">童鞋童包</a></li>
-                                    <li><a href="#">喂养</a></li>
-                                    <li><a href="#">洗护</a></li>
-                                    <li><a href="#">寝居</a></li>
-                                </ul>
-                            </li>
+                        <ul id="order_08" class="nav nav-list collapse secondmenu text-center" style="height: 0px;">
+                            <li><a href="{% url 'product:category' 8101 %}">洗护美妆</a></li>
+                            <li><a href="{% url 'product:category' 8102 %}">母婴亲子</a></li>
                         </ul>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{% url 'product:category' 0 %}">
                             <i class="glyphicon glyphicon-fire"></i>
                             其他
                         </a>
