@@ -95,7 +95,7 @@ def check_login(request):
             return redirect(reverse('home', args=[]))
     else:
         # 登录异常，请重新登录：通过返回特定参数，启动jquery打开二维码扫描页面
-        pass
+        return redirect(reverse('home', args=[]))
 
 # 根据发送消息类型
 def send(request, uuid, NickName, UserName, invation_code, msg_type):
