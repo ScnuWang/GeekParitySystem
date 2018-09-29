@@ -15,4 +15,7 @@ def timestamp_parse(value, format_string):
 # 如果值为空，返回默认值
 @register.filter(expects_localtime=True, is_safe=False)
 def default_parse(value,default_value):
-    return default_value
+    if value is None:
+        return default_value
+    else:
+        return value
