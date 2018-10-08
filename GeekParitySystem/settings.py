@@ -84,7 +84,6 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
-        #'HOST': 'geekviewrm-wz9kce3fs0rk77v14.mysql.rds.aliyuncs.com',
         'PORT': '3306',
         'OPTIONS': {'charset': 'utf8mb4'},
     },
@@ -135,7 +134,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # 用于为了部署搜集静态文件
-STATIC_ROOT = "/var/parity.geekview.cn/static/"
+#STATIC_ROOT = "/var/parity.geekview.cn/static/"
 
 # 静态文件目录路径  : 需要添加这个在能使用智能提示静态文件的路径
 STATICFILES_DIRS = [os.path.join(BASE_DIR,'static')]

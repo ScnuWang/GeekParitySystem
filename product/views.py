@@ -124,7 +124,7 @@ def classify(request):
             tags_from_serach = jieba.lcut_for_search(product.project_name)# jieba引擎模式，直接返回list
             tags = jieba.analyse.extract_tags(product.project_name, topK=20, withWeight=False, allowPOS=()) # 分析模式
             # 为了尽可能多的分词，所以就结合两种模式，取并集设立关键字，并去除空格
-            tags.extend([tag for tag in tags_from_serach if tag not in ('',' ','  ')])
+            tags.extend([tag for tag in tags_from_serach if tag not in ('',' ','  ','(',')','·')])
             unique_product.tags = list(set(tags))
             unique_product.tags_status = 1
             unique_product.tags_time = datetime.datetime.now()

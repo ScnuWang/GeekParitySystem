@@ -3,6 +3,7 @@
 - MySQL：用户信息
 - MongoDB：产品信息
 使用数据库路由，自动选择数据库
+MongoDB的客户端使用：[adminMongo](https://adminmongo.markmoffat.com/)
 ### 分词
 
 - [jieba](https://github.com/fxsjy/jieba)
